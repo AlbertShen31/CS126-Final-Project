@@ -13,3 +13,8 @@
 
 
 
+###Potential Libraries
+ofxGame
+ofxBox2d
+ofxLiquidFun
+ofxGeneticAlg
