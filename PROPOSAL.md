@@ -7,7 +7,7 @@
 2. Create the car to drive the user through the world 
 3. Create the Player within the car
 4. Create objectives and implement score for user
-5. Create menu for user
+5. Create menu for user to pause game
 6. Create an AI to play the game through genetic algorithm
 
 
