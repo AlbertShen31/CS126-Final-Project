@@ -1,6 +1,6 @@
 # Final Project
 
-## Creating Hill-Climb Racing[Hill-Climb Racing](https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb&hl=en_US)
+## Creating [Hill-Climb Racing](https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb&hl=en_US)
 
 ### Objectives
 1. Create a randomly generated world for the user to drive through
