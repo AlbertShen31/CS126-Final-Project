@@ -7,13 +7,11 @@
 2. Create the car to drive the user through the world 
 3. Create the Player within the car
 4. Create objectives and implement score for user
-5. Create menu for user to pause game
-6. Create an AI to play the game through genetic algorithm
+5. Create menu for user to pause and reset game as well as change settings
 
 
+### Potential Extensions
+1. Create an AI to play the game through genetic algorithm
 
-### Potential Libraries
-* ofxGame
+### Libraries Used
 * ofxBox2d
-* ofxLiquidFun
-* ofxGeneticAlg
