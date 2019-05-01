@@ -20,7 +20,34 @@
 * Created rectangle shape for car body
 * Used wheel joints to fix car body position
 
+# Week 3
+
 ## World Generation
 
-### Perlin Noise
-* Work in Progress
+### Created Hills
+* Experimented with various methods to create smooth terrain
+
+## Camera Tracking
+
+### Fixate Axis
+* Shift objects based on car's position on screen
+* Appears as if Car is stuck in place
+* Other objects fail to redraw positions
+
+## Refactoring
+
+### Restructured Code
+* Put Car Body, Wheel, and Car into own separate class
+* Separation of important values into various properties and constants of each class
+
+# Week 4
+
+## World Generation
+
+###
+
+## Menu
+
+### Settings
+
+### Resetting game
