@@ -71,6 +71,7 @@ void ofApp::keyPressed(int key){
     } else if(key == 'r') {
         drawHill();
         resetCar(spawnHeight, 0);
+        speed = 0;
     } else if(key == 'a') {
         moveRight = false;
         moveLeft = true;
