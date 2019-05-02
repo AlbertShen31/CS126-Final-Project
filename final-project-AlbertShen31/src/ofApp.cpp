@@ -14,100 +14,71 @@ void ofApp::setup(){
     box2d.setGravity(0, 9.81);
     box2d.setFPS(60.0);
     ofSetHexColor(0xf6c738);
+    
+    drawHill();
+    
     box2d.createGround();
     
-//    car.setup(box2d.getWorld(), 250, 700, 10);
-
+    car.setup(box2d.getWorld(), 250, 500, 10);
     
-    auto wheel1 = std::make_shared<Wheel>();
-    wheel1.get()->setPhysics(3.0, 0.53, 0.9);
-    wheel1.get()->setup(box2d.getWorld(), 50, 700, 10);
-    wheels.push_back(wheel1);
-
-    auto wheel2 = std::make_shared<Wheel>();
-    wheel2.get()->setPhysics(3.0, 0.53, 0.9);
-    wheel2.get()->setup(box2d.getWorld(), 100, 700, 10);
-    wheels.push_back(wheel2);
-
-    auto joint = std::make_shared<ofxBox2dJoint>();
-
-    joint.get()->setup(box2d.getWorld(), wheels[0].get()->body, wheels[1].get()->body);
-    joint.get()->setLength(25);
-    joints.push_back(joint);
-
-    carBody.setPhysics(3.0, 0.53, 0.9);
-    carBody.setup(box2d.getWorld(), 75, 680, 70, 20);
-
-    b2RevoluteJointDef jointDef;
-    jointDef.Initialize(carBody.body, wheels[0].get()->body, wheels[0]->body->GetWorldCenter());
-    revJoint1 = (b2RevoluteJoint*)box2d.getWorld()->CreateJoint( &jointDef );
-    revJoint1->EnableMotor(true);
-    revJoint1->SetMaxMotorTorque(10000);
-
-    b2RevoluteJointDef jointDef2;
-    jointDef2.Initialize(carBody.body, wheels[1].get()->body, wheels[1]->body->GetWorldCenter());
-    revJoint2 = (b2RevoluteJoint*)box2d.getWorld()->CreateJoint( &jointDef2 );
-    revJoint2->EnableMotor(true);
-    revJoint2->SetMaxMotorTorque(10000);
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     if (moveRight && speed <= 50) {
-        speed+= .5;
+        speed += .5;
     } else if (moveLeft && speed >= -50) {
-        speed-= .5;
+        speed -= .5;
     } else  {
-        speed *= 0.9;
+        speed *= 0.99;
     }
+    car.setMotorSpeed(speed);
     
-    revJoint1->SetMotorSpeed(speed);
-    revJoint2->SetMotorSpeed(speed);
-    b2Vec2 temp(carBody.body->GetWorldCenter().x - 10, carBody.body->GetWorldCenter().y - 20);
-    b2Vec2 &origin = temp;
-    box2d.getWorld()->ShiftOrigin(origin);
-//    car.setMotorSpeed(speed);
+//    b2Vec2 temp((car.frontWheel.body->GetWorldCenter().x - 10)/OFX_BOX2D_SCALE, (car.frontWheel.body->GetWorldCenter().y-10)/OFX_BOX2D_SCALE);
+//    b2Vec2 &origin = temp;
+//    box2d.getWorld()->ShiftOrigin(origin);
+//
+    
+//    ofTranslate(car.frontWheel.body->GetWorldCenter().x, car.frontWheel.body->GetWorldCenter().y, 0);
+    
+    
+//
+//    ofPushMatrix();
+//    draw();
     box2d.update();
+//    ofPopMatrix();
+    box2d.createGround(0, 720, 10000, 720);
+    
+    box2d.getWorld()->Step(1/50.0, 8, 3);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-//    ofTranslate(carBody.body->GetWorldCenter().x-b2World, carBody.body->GetWorldCenter().y, 0);
-    
-    
-    ofFill();
-    ofSetHexColor(0xf6c738);
-    for(int i=0; i<wheels.size(); i++) {
-        wheels[i].get()->draw();
-    }
+//    ofTranslate(-car.frontWheel.body->GetWorldCenter().x/OFX_BOX2D_SCALE, car.frontWheel.body->GetWorldCenter().y/OFX_BOX2D_SCALE, 0);
+//    b2Vec2 temp((car.frontWheel.body->GetWorldCenter().x - 10)/OFX_BOX2D_SCALE, (car.frontWheel.body->GetWorldCenter().y-10)/OFX_BOX2D_SCALE);
+//    b2Vec2 &origin = temp;
+//    box2d.getWorld()->ShiftOrigin(origin);
 
+
+//    ofSetHexColor(0x444342);
+//    ofNoFill();
+//    for (int i=0; i<lines.size(); i++) {
+//        lines[i].draw();
+//    }
+    
     ofSetHexColor(0x444342);
     ofNoFill();
-    for (int i=0; i<lines.size(); i++) {
-        lines[i].draw();
-    }
     for (int i=0; i<edges.size(); i++) {
         edges[i].get()->draw();
     }
 
-    for (int i=0; i<cars.size(); i++) {
-        cars[i].get()->draw();
-    }
-
-    carBody.draw();
-//    car.draw();
-    
-    // draw the ground
-    ofFill();
-    ofSetHexColor(0xa6c7f8);
-    
-    box2d.drawGround();
+    edge.draw();
+    car.draw();
+    box2d.createGround(0, 720, 10000, 720);
     
     string info = "";
-//    info += "Press [w] for wheels\n";
-    info += "Total Bodies: "+ofToString(box2d.getBodyCount())+"\n";
-    info += "Total Joints: "+ofToString(box2d.getJointCount())+"\n\n";
+    info += "Press r to reset terrain\n";
     info += "FPS: "+ofToString(ofGetFrameRate(), 1)+"\n";
     ofSetHexColor(0x444342);
     ofDrawBitmapString(info, 30, 30);
@@ -117,26 +88,14 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     if(key == 't') {
       ofToggleFullscreen();
-    }
-    
-    if(key == 'w') {
-        auto car1 =std::make_shared<Car>();
-        car1.get()->setup(box2d.getWorld(), mouseX, mouseY, 10);
-        cars.push_back(car1);
-    }
-    
-    if(key == 'a') {
+    } else if(key == 'r') {
+        drawHill();
+    } else if(key == 'a') {
         moveRight = false;
         moveLeft = true;
-        for (int i = 0; i < 2; ++i) {
-//            wheels[i]->rotate(-10);
-        }
     } else if(key == 'd') {
         moveRight = true;
         moveLeft = false;
-        for (int i = 0; i < 2; ++i) {
-//            wheels[i]->rotate(10);
-        }
     } else {
         moveRight = false;
         moveLeft = false;
@@ -156,17 +115,16 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    //lines.back().addVertex(x, y);
-    auto edge = std::make_shared<ofxBox2dEdge>();
-    lines.back().addVertex(x, y);
-    lines.back().simplify();
-    
-    for (auto i=0; i<lines.back().size(); i++) {
-        edge.get()->addVertex(lines.back()[i]);
-    }
-    
-    edge.get()->create(box2d.getWorld());
-    edges.push_back(edge);
+//    auto edge = std::make_shared<ofxBox2dEdge>();
+//    lines.back().addVertex(x, y);
+//    lines.back().simplify();
+//
+//    for (auto i=0; i<lines.back().size(); i++) {
+//        edge.get()->addVertex(lines.back()[i]);
+//    }
+//
+//    edge.get()->create(box2d.getWorld());
+//    edges.push_back(edge);
 }
 
 //--------------------------------------------------------------
@@ -177,18 +135,16 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    auto edge = std::make_shared<ofxBox2dEdge>();
-    lines.back().addVertex(x, y);
-    lines.back().simplify();
-    
-    for (auto i=0; i<lines.back().size(); i++) {
-        edge.get()->addVertex(lines.back()[i]);
-    }
-    
-    edge.get()->create(box2d.getWorld());
-    edges.push_back(edge);
-    
-    //lines.clear();
+//    auto edge = std::make_shared<ofxBox2dEdge>();
+//    lines.back().addVertex(x, y);
+//    lines.back().simplify();
+//
+//    for (auto i=0; i<lines.back().size(); i++) {
+//        edge.get()->addVertex(lines.back()[i]);
+//    }
+//
+//    edge.get()->create(box2d.getWorld());
+//    edges.push_back(edge);
 }
 
 //--------------------------------------------------------------
@@ -203,8 +159,6 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    ofFill();
-    ofSetHexColor(0xf6c738);
     box2d.createGround();
 }
 
@@ -218,3 +172,13 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+void ofApp::drawHill() {
+    int randomHeight = rand() % 100;
+    edge.clear();
+    int startY = rand() % 100 + 450;
+    int endY = rand() % 100 + 450;
+    int bezierY = rand() % 200 + 100;
+    edge.addVertex(0, startY);
+    edge.bezierTo(300 + rand() % 100, startY + bezierY, 700 + rand() % 100, endY - bezierY, 1024, endY);
+    edge.create(box2d.getWorld());
+}

@@ -27,24 +27,16 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+        void drawHill();
+    
     float speed;
     bool moveRight = false;
     bool moveLeft = false;
 		
     ofxBox2d box2d;   // the box2d world
-    CarBody carBody;
     Car car;
-    b2WheelJoint* wheelJoint;
-    b2WheelJoint* wheelJoint2;
-    b2RevoluteJoint* revJoint1;
-    b2RevoluteJoint* revJoint2;
     
-    
-    
-    vector <shared_ptr <Car> > cars;
-    vector <shared_ptr <Wheel> > wheels;
-    vector <shared_ptr <ofxBox2dRect> > boxes;
+    ofxBox2dEdge edge;
     vector <shared_ptr <ofxBox2dEdge> > edges;
     vector <ofPolyline> lines;
-    vector <shared_ptr <ofxBox2dJoint> > joints;
 };
