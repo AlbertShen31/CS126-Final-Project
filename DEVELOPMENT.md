@@ -44,10 +44,15 @@
 
 ## World Generation
 
-###
+### Bezier Curves
+* Create Bezier Curves for Hilly Terain
+* Reset Map when move past right edge of screen to continue Terrain
+* Lose when move past left edge
+
 
 ## Menu
 
 ### Settings
 
 ### Resetting game
+* Able to reset the terrain with car position
