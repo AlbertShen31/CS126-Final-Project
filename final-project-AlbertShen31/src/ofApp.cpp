@@ -18,6 +18,7 @@ void ofApp::setup(){
     box2d.setFPS(60.0);
     ofSetHexColor(0xf6c738);
     
+    spawnHeight = 450;
     drawHill();
     car.setup(box2d.getWorld(), 100, spawnHeight, 10);
     box2d.createGround();
@@ -38,7 +39,7 @@ void ofApp::update(){
     box2d.createGround();
     
     if (car.frontWheel.getPosition().x > windowWidth) {
-        drawHill();
+        drawHill(nextHeight);
         resetCar(car.frontWheel.getPosition().y, car.carBody.getRotation());
     }
     
@@ -58,7 +59,7 @@ void ofApp::draw(){
     box2d.createGround(0, 720, 10000, 720);
     
     string info = "";
-    info += "Press r to reset terrain\n";
+    info += "Press r to reset level\n";
     info += "FPS: "+ofToString(ofGetFrameRate(), 1)+"\n";
     ofSetHexColor(0x444342);
     ofDrawBitmapString(info, 30, 30);
@@ -148,16 +149,36 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+int ofApp::random(int num) {
+    return (rand() % num) * pow(-1, rand() % 2);
+}
+
 void ofApp::drawHill() {
     edge.clear();
-    int startY = rand() % 100 + 450;
-    int endY = rand() % 100 + 450;
+    int startY = random(100) + rand() % 500;
+    int endY = random(100) + rand() % 500;
     int bezierY = rand() % 200 + 100;
-    spawnHeight = startY - 50;
     
     edge.addVertex(0, startY);
-    edge.bezierTo(300 + rand() % 100, startY + bezierY, 700 + rand() % 100, endY - bezierY, windowWidth, endY);
+    edge.bezierTo(300, startY + bezierY, 700,
+                  endY - bezierY, windowWidth, endY);
     edge.create(box2d.getWorld());
+    
+    spawnHeight = startY - 50;
+    nextHeight = endY;
+}
+
+void ofApp::drawHill(int newHeight) {
+    edge.clear();
+    int startY = newHeight;
+    int endY = random(100) + newHeight;
+    int bezierY = rand() % 200 + 100;
+
+    edge.addVertex(0, startY);
+    edge.bezierTo(300, startY + bezierY, 700, endY - bezierY, windowWidth, endY);
+    edge.create(box2d.getWorld());
+
+    nextHeight = endY;
 }
 
 void ofApp::resetCar(int height, float rotation) {
