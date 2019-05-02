@@ -11,7 +11,29 @@ Car::Car() {
     
 }
 
+
 void Car::setup(b2World * b2dworld, float x, float y, float radius) {
+    if(b2dworld == NULL) {
+        ofLog(OF_LOG_NOTICE, "- must have a valid world -");
+        return;
+    }
+    
+//    b2PolygonShape shape = 
+//    
+//    fixture.shape        = &shape;
+//    fixture.density        = density;
+//    fixture.friction    = friction;
+//    fixture.restitution = bounce;
+//    
+//    b2BodyDef bodyDef;
+//    bodyDef.type    = b2_dynamicBody;
+//    bodyDef.position.Set(x/OFX_BOX2D_SCALE, y/OFX_BOX2D_SCALE);
+//    alive = true;
+//    
+//    
+//    body = b2dworld->CreateBody(&bodyDef);
+//    body->CreateFixture(&fixture);
+    
     carBody.setPhysics(5.0, 0.13, 0.9);
     carBody.setup(b2dworld, x + (radius * 5 / 2), y - 2 * radius, 7 * radius, 2 * radius);
     
@@ -60,4 +82,11 @@ void Car::draw() {
     frontWheel.draw();
     backWheel.draw();
     carBody.draw();
+}
+
+
+void Car::destroy() {
+    frontWheel.destroy();
+    backWheel.destroy();
+    carBody.destroy();
 }

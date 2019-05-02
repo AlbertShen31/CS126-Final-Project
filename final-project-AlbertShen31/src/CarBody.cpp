@@ -92,19 +92,3 @@ void CarBody::draw() {
     ofPopMatrix();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

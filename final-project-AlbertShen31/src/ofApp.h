@@ -28,10 +28,12 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
         void drawHill();
+        void resetCar(int height, float rotation);
     
     float speed;
     bool moveRight = false;
     bool moveLeft = false;
+    int spawnHeight;
 		
     ofxBox2d box2d;   // the box2d world
     Car car;

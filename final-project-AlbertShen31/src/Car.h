@@ -11,7 +11,7 @@
 #include "Wheel.h"
 #include "CarBody.h"
 
-class Car : public ofxBox2dBaseShape {
+class Car {
     
 private:
     
@@ -20,8 +20,6 @@ public:
     Wheel frontWheel;
     Wheel backWheel;
     b2DistanceJoint* joint;
-//    b2WheelJoint* frontJoint;
-//    b2WheelJoint* backJoint;
     b2RevoluteJoint* frontJoint;
     b2RevoluteJoint* backJoint;
     CarBody carBody;
@@ -34,4 +32,6 @@ public:
     void setMotorSpeed(float amt);
     
     void draw();
+    
+    void destroy();
 };
